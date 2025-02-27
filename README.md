@@ -17,19 +17,24 @@ This project is a web application for online shopping that allows users to add i
 - **Database:** MongoDB
 - **Template Engine:** hbs
 
-## 📸 Screenshots
-![Main Screen](link_to_screenshot.png)
-
 ## 📌 Installation
 1. Clone the repository:
    ```sh
    git clone [https://github.com/user/online-cart.git](https://github.com/OleksandrZaynyato/Rozetka-Parsing.git)
    ```
-2. . Install dependencies:
+2. Install dependencies:
    ```sh
    npm install axios bcryptjs cheerio cookie-parser cors dotenv express hbs jsonwebtoken mongoose node-telegram-bot-api nodemon
    ```
-4. Start the server:
+3. Init your tg bot at @BotFather
+3. Add these variable to .env
+   ```sh
+   MONGODB_URL - // to connect your database
+   SECRET_KEY - // to hesh paswords
+   PORT=3000 - // PORT
+   TG_BOT_TOKEN - // token to get access to your tg bot
+   ```
+5. Start the server:
    ```sh
    npm start
    ```
