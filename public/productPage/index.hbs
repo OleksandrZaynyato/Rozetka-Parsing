@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{product.name}}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link href="../fonts.css" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../productPage/style.css">
+</head>
+<body>
+<header>
+    <div class="base-layout-centered">
+        <a href="/">Home</a>
+
+        {{#if user}}
+            <a href="/" class="cta"><button class="logout"><img src="/images/logout.png" alt=""></button></a>
+        {{else}}
+            <a href="/user/login" class="cta"><button><img src="/images/login.png" alt=""></button></a>
+        {{/if}}
+    </div>
+</header>
+
+<main>
+<div class="container base-layout-centered">
+    <div class="top">
+        <div class="image">
+            <img src="{{product.image}}" alt="">
+        </div>
+
+        <div class="top__info">
+            <div>
+                <h1 class="top__info-title">{{product.title}}</h1>
+            </div>
+            <div class="grid">
+                <h3 class="top__info-price top__info-price_if-discount-true">{{product.price}}</h3>
+                <h3 class="top__info-discount">
+                    {{#if product.discountPrice}}
+                        {{product.discountPrice}}
+                    {{else}}
+
+                    {{/if}}
+                </h3>
+                <h4 class="top__info-status">{{product.status}}</h4>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="roboto-bold specifications">Specifications</h2>
+    <table class="specifications">
+        <tbody>
+            {{#each product.specifications}}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.value}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <div class="feedback">
+        <h2 class="roboto-bold">Feedback</h2>
+        <div class="feedback__list">
+            {{#each product.comments}}
+                <div class="feedback-item">
+                    <div class="feedback-top">
+                        <h2 class="roboto-medium">{{this.writerName}}</h2>
+                        <span class="date">{{this.date}}</span>
+                    </div>
+                    <p>{{this.content}}</p>
+                    <p class="rating">
+                        <span class="{{#if (gte this.rating 1)}}yellow-star{{/if}}">★</span>
+                        <span class="{{#if (gte this.rating 2)}}yellow-star{{/if}}">★</span>
+                        <span class="{{#if (gte this.rating 3)}}yellow-star{{/if}}">★</span>
+                        <span class="{{#if (gte this.rating 4)}}yellow-star{{/if}}">★</span>
+                        <span class="{{#if (gte this.rating 5)}}yellow-star{{/if}}">★</span>
+                    </p>
+                    <div class="feedback-bottom">
+                        <div class="likes"><img src="../images/like.png" alt=""><span>{{this.likes}}</span></div>
+                        <div class="dislikes"><img src="../images/dislike.png" alt=""><span>{{this.dislikes}}</span></div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+</div>
+
+
+</main>
+<script>
+    window.addEventListener('load', () => {
+        const discountP = document.querySelectorAll('.top__info-discount');
+        discountP.forEach((p) => {
+            if (p.textContent.includes('\n\n')) {
+                // make string how delete class from element
+                document.querySelector(`.top__info-price`).style.textDecoration = 'none';
+                // document.querySelector(`.top__info-price`).classList.delete('top__info-price_if-discount-true');
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

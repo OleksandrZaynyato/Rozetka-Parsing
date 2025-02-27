@@ -1,0 +1,353 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.wrap{
+    /*background-color: #d4d8f3;*/
+    background-color: #faf7f7;
+    min-height: 100vh;
+}
+
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /*background-color: #ede9e9;*/
+}
+
+.line{
+    width: 100%;
+    height: 1px;
+    background-color: #4a4a4a;
+}
+
+
+header {
+    height: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /*padding: 20px 13%;*/
+    /*background-color: #14152a;*/
+    /*background-color: #7209b7;*/
+    color: white;
+}
+
+header div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo img {
+    max-height: 90px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin-left: 30px;
+}
+
+.nav-links li a {
+    color: #fff;
+    /*font-family: Arial;*/
+    /*font-weight: 500;*/
+    text-decoration: none;
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.nav-links li a:hover {
+    /*color: #ff6700;*/
+    color: #dfdeee;
+}
+
+
+.cta button {
+    padding: 7px 7px 5px 5px;
+    background-color: transparent;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cta button:hover {
+    background-color: rgba(189, 188, 188, 0.45);
+}
+
+.cta button img {
+    height: 40px;
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .nav-links {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .cta button {
+        width: 100%;
+    }
+}
+
+
+#parseUrlForm{
+    width: 400px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Контейнер інпуту */
+.input-container {
+    position: relative;
+    width: 300px;
+}
+
+/* Інпут */
+#inputUrl {
+    width: 100%;
+    height: 46px;
+    padding: 12px 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    color: #333;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* Інпут: фокус */
+#inputUrl:focus {
+    border-color: #6a11cb; /* Фіолетовий акцент */
+    box-shadow: 0 0 6px rgba(106, 17, 203, 0.4);
+}
+
+/* Плейсхолдер */
+#inputUrl::placeholder {
+    color: transparent; /* Приховуємо стандартний плейсхолдер */
+}
+
+/* Лейбл */
+.input-container label {
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    font-size: 16px;
+    color: #aaa;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+/* Лейбл: активний стан */
+#inputUrl:focus + label,
+#inputUrl:not(:placeholder-shown) + label {
+    top: -8px;
+    left: 12px;
+    font-size: 12px;
+    background: #fff;
+    padding: 0 4px;
+    color: #6a11cb; /* Фіолетовий акцент */
+}
+
+.sbm-btn{
+    width: 70px;
+    height: 46px;
+    /*border: 2px solid #6a11cb;*/
+    border: 2px solid #6a11cb;
+
+    border-radius: 8px;
+    background: #fff;
+    color: #6a11cb;
+    font-size: 17px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sbm-btn:hover{
+    background: #6a11cb;
+    color: #fff;
+}
+
+
+/* Загальні стилі */
+body {
+    font-family: Arial, sans-serif;
+}
+
+
+.cart-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+
+
+.card-description{
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+    "card-price card-status"
+    "card-price-discount card-status";
+}
+
+
+/* Картка */
+.card {
+    position: relative;
+    width: 300px;
+    height: 440px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Зображення */
+.card-image {
+    width: 100%;
+    max-height: 220px;
+    height: 220px;
+    object-fit: cover;
+    /*background: #eee;*/
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Контент */
+.card-content {
+    padding: 16px;
+}
+
+.card-title {
+    max-height: 60px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin: 0 0 8px;
+}
+
+
+.card-price,
+.card-discount,
+.card-status {
+    font-size: 14px;
+    margin: 4px 0;
+    color: #555;
+}
+
+.card-price ,
+.card-discount  {
+    font-weight: bold;
+    color: #333;
+}
+
+.card-price{
+    grid-area: card-price;
+    text-decoration: line-through;
+}
+
+.card-discount  {
+    color: #e74c3c; /* Червоний для знижки */
+    grid-area: card-price-discount; font-size: 18px;
+}
+
+.card-status  {
+    font-weight: bold;
+    color: #27ae60; /* Зелений для статусу */
+    grid-area: card-status;
+    text-align: end;
+}
+
+/* Кнопки */
+.card-actions {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    border-top: 1px solid #ddd;
+}
+
+.btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    text-decoration: none;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Кнопка Delete */
+.btn-delete {
+    background: #e74c3c;
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background: #c0392b;
+}
+
+/* Кнопка Link */
+.btn-link {
+    background: #6a11cb;
+    color: #fff;
+}
+
+.btn-link:hover {
+    background: #4a0c8f;
+}
+
+.card-title {
+    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+/* Встановлення розміру скролбару */
+.card-title::-webkit-scrollbar {
+    width: 10px; /* Ширина для вертикальної */
+    height: 10px; /* Висота для горизонтальної */
+}
+
+/* Стиль фону скролбару */
+.card-title::-webkit-scrollbar-track {
+    background: #f4f4f4; /* Сірий фон */
+    border-radius: 5px;  /* Закруглені кути */
+}
+
+/* Стиль повзунка */
+.card-title::-webkit-scrollbar-thumb {
+    background: #8a2be2; /* Фіолетовий колір */
+    border-radius: 5px;  /* Закруглені кути */
+}
+
+/* Стиль повзунка при ховері */
+.card-title::-webkit-scrollbar-thumb:hover {
+    background: #6a1b9a; /* Темніший фіолетовий */
+}

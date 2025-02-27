@@ -1,0 +1,133 @@
+<!--<header>-->
+<!--    <div class="logo">-->
+<!--        <img src="/images/logo/Screenshot_20240928-115539_Opera-removebg-preview.png" alt="">-->
+<!--    </div>-->
+
+<!--    <nav>-->
+<!--        <a href="/"><img src="" alt="">Home</a>-->
+<!--        <a href="/user/register">Registration</a>-->
+<!--        <a href="/user/login">Login</a>-->
+<!--        <a href="/product">Products</a>-->
+<!--        <a href="/cart">Cart</a>-->
+<!--        <a href="/wishlist">Wishlist</a>-->
+<!--    </nav>-->
+<!--</header>-->
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    header {
+        height: 100px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        /*padding: 20px 13%;*/
+        /*background-color: #14152a;*/
+        /*background-color: #7209b7;*/
+        color: white;
+    }
+
+    header div{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .logo img {
+        max-height: 90px;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+        margin-left: 30px;
+    }
+
+    .nav-links li a {
+        color: #fff;
+        /*font-family: Arial;*/
+        /*font-weight: 500;*/
+        text-decoration: none;
+        font-size: 20px;
+        transition: color 0.3s;
+    }
+
+    .nav-links li a:hover {
+        /*color: #ff6700;*/
+        color: #dfdeee;
+    }
+
+
+    .cta button {
+        padding: 7px 7px 5px 5px;
+        background-color: transparent;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .cta button:hover {
+        background-color: rgba(189, 188, 188, 0.45);
+    }
+
+    .cta button img {
+        height: 40px;
+    }
+
+    /* Адаптивність */
+    @media (max-width: 768px) {
+        .nav-links {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .cta button {
+            width: 100%;
+        }
+    }
+
+</style>
+<header>
+    <div class="base-layout-centered">
+        <div>
+            <div class="logo">
+<!--                <a href="/"><img src="/images/logo/logo_goruzontal_light.png" alt="Logo"></a>-->
+
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a class="roboto-regular" href="/product">Products</a></li>
+                    <li><a class="roboto-regular" href="/cart">Cart</a></li>
+                    <li><a class="roboto-regular" href="/wishlist">Wishlist</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        {{#if user}}
+            <a href="/" class="cta"><button class="logout"><img src="/images/logout.png" alt=""></button></a>
+        {{else}}
+            <a href="/user/login" class="cta"><button><img src="/images/login.png" alt=""></button></a>
+        {{/if}}
+    </div>
+</header>
+
+<script>
+    const logoutButton = document.querySelector('.logout');
+    if (logoutButton !== null) {
+        logoutButton.addEventListener('click', () => {
+            fetch('/user/logout', {
+                method: 'POST'
+            }).then(() => {
+                window.location.href = '/';
+            });
+        });
+    }
+
+</script>

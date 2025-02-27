@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../fonts.css">
+    <link rel="stylesheet" href="../styles.css">
+<!--    <link rel="stylesheet" href="./style.css">-->
+    <link rel="stylesheet" href="../homePage/style.css">
+</head>
+<body>
+<div class="wrap">
+    <!--<header>-->
+    <!--    <div class="logo">-->
+    <!--        <img src="/images/logo/Screenshot_20240928-115539_Opera-removebg-preview.png" alt="">-->
+    <!--    </div>-->
+
+    <!--    <nav>-->
+    <!--        <a href="/"><img src="" alt="">Home</a>-->
+    <!--        <a href="/user/register">Registration</a>-->
+    <!--        <a href="/user/login">Login</a>-->
+    <!--        <a href="/product">Products</a>-->
+    <!--        <a href="/cart">Cart</a>-->
+    <!--        <a href="/wishlist">Wishlist</a>-->
+    <!--    </nav>-->
+    <!--</header>-->
+    <header>
+        <div class="base-layout-centered">
+            <form id="parseUrlForm" class="space-grotesk-medium">
+                <div class="input-container ">
+                    <input type="text" id="inputUrl" placeholder="Enter your text here">
+                    <label for="inputUrl">URL to product on Rozetka</label>
+                </div>
+                <button id="addNewProduct" class="sbm-btn space-grotesk-bold" type="submit">Send</button>
+            </form>
+
+            {{#if isAuthenticated}}
+                <a href="/" class="cta"><button class="logout"><img src="/images/logout.png" alt=""></button></a>
+            {{else}}
+                <a href="/user/login" class="cta"><button><img src="/images/login.png" alt=""></button></a>
+            {{/if}}
+        </div>
+    </header>
+
+
+
+    <div class="line base-layout-centered"></div>
+
+    <main class="base-layout-centered">
+        <div class="cart-container">
+            {{#each products}}
+                <div class="card">
+                    <a href="/product/{{this._id}}">
+                        <div class="img card-image" style='background-image: url("{{this.image}}")'></div>
+                    </a>
+
+                    <div class="card-content">
+                        <a href="/product/{{this._id}}">
+                            <h2 class="card-title">{{this.title}}</h2>
+                        </a>
+                        <div class="card-description">
+                            <p class="card-price" data-number="{{this.number}}">{{this.price}}</p>
+                            <p class="card-discount" data-number="{{this.number}}">
+                                {{#if this.discountPrice}}
+                                    {{this.discountPrice}}
+                                {{else}}
+
+                                {{/if}}
+                                    </p>
+                            <p class="card-status">{{this.status}}</p>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="{{this.link}}" class="btn btn-link">link</a>
+                        <button class="btn btn-delete" id="{{this._id}}">Delete</button>
+                    </div>
+                </div>
+
+            {{/each}}
+        </div>
+        {{#if isAuthenticated}}
+
+        {{else}}
+            <h2 class="space-grotesk-bold">You are not logged in</h2>
+        {{/if}}
+    </main>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // const Swal = require('sweetalert2')
+
+    //do when page is loaded
+    window.addEventListener('load', () => {
+        console.log({{eq user "undefined"}});
+        //const isAuthenticated = {{isAuthenticated}};
+        //if (!isAuthenticated){
+        //    // document.querySelector('header .base-layout-centered').innerHTML += `
+        //    //     <a href="/user/login" class="cta"><button><img src="/images/login.png" alt=""></button></a>
+        //    // `
+        //    // document.querySelector('.cart-container').style.display = 'none';
+        //    document.querySelector('main').insertAdjacentHTML('beforeend', '<h2 class="space-grotesk-bold">You are not logged in</h2>');
+        //} else {
+        //    // document.querySelector('header .base-layout-centered').innerHTML = `
+        //    //     <a href="/" class="cta"><button class="logout"><img src="/images/logout.png" alt=""></button></a>
+        //    // `
+        //}
+        const discountP = document.querySelectorAll('.card-discount');
+        discountP.forEach((p) => {
+            console.log(p.textContent);
+
+            if (p.textContent.includes('\n\n')) {
+                const number = p.getAttribute('data-number');
+                document.querySelector(`.card-price[data-number="${number}"]`).style.textDecoration = 'none';
+            }
+        });
+    });
+    // const discountP = document.querySelectorAll('.card-discount');
+    // discountP.forEach((p) => {
+    //     if (p.textContent === '') {
+    //         const number = p.getAttribute('data-number');
+    //         console.log(number);
+    //         document.querySelector(`.card-price[data-number="${number}"]`).style.textDecoration = 'none';
+    //     }
+    // });
+    document.getElementById('parseUrlForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!{{isAuthenticated}}) {
+            await  Swal.fire({
+                title: "You are not logged in",
+                text: "Please log in to add products",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+        }
+        const url = document.getElementById('inputUrl').value;
+        if (!url || url.trim() === '') {
+            await Swal.fire({
+                title: "Empty URL",
+                text: "Please enter URL",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+            return;
+        }
+        try{
+            const response = await fetch('/product/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    credentials: 'include'
+                },
+                body: JSON.stringify({url})
+            });
+            console.log("response: ",response);
+            if (response.ok) {
+                const result = await response.json();
+                console.log(result.message);
+
+                await Swal.fire({
+                    title: "Product added",
+                    text: "Product added successfully",
+                    icon: "success",
+                    confirmButtonText: "OK"
+                });
+                window.location.reload();
+                
+            }
+            if (response.status === 400) {
+                const data = await response.json();
+                await Swal.fire({
+                    title: "Error",
+                    text: data.message,
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+            }
+        } catch (error) {
+            console.error("Error registering:", error);
+        }
+        // fetch('/product/add', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         credentials: 'include'
+        //     },
+        //     body: JSON.stringify({url})
+        // })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log(data)
+        //         window.location.reload();
+        //     })
+        //     .catch(error => console.error(error));
+        // // refresh page
+        // window.location.reload();
+    })
+
+    document.querySelectorAll('.btn-delete').forEach((button) => {
+        button.addEventListener('click', async (event) => {
+            const id = button.id;
+            console.log(id);
+            try {
+
+                const result = await Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                })
+
+                if (!result.isConfirmed) {
+                    return;
+                }
+
+                // const confirm1 = confirm('Are you sure you want to delete this product?');
+                // if (!confirm1) {
+                //     return;
+                // }
+                const response = await fetch('/product/delete', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        credentials: 'include'
+                    },
+                    body: JSON.stringify({id})
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log(result.message);
+
+                        await Swal.fire({
+                           title: "Deleted!",
+                           text: "Your file has been deleted.",
+                           icon: "success"
+                       });
+
+
+                    window.location.reload();
+                }
+                if (response.status === 400) {
+                    const data = await response.json();
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error("Error registering:", error);
+            }
+        });
+    });
+
+    // document.addEventListener('click', async function(event) {
+    //     // Перевіряємо, чи натиснули на кнопку з класом "btn-delete"
+    //     if (event.target.classList.contains('btn-delete')) {
+    //         // Знаходимо картку, якій належить ця кнопка
+    //         const card = event.target.closest('.card');
+    //         if (card) {
+    //             // Знаходимо заголовок картки
+    //             const titleElement = card.querySelector('.card-title');
+    //             if (titleElement) {
+    //                 // Отримуємо текст заголовка
+    //                 const titleText = titleElement.textContent.trim();
+    //                 console.log(`Title of the deleted card: ${titleText}`);
+    //                 try {
+    //                     const response = await fetch('/product/delete', {
+    //                         method: 'DELETE',
+    //                         headers: {
+    //                             'Content-Type': 'application/json',
+    //                             credentials: 'include'
+    //                         },
+    //                         body: JSON.stringify({title: titleText})
+    //                     });
+    //                     const data = await response.json();
+    //                     console.log(data);
+    //                     card.remove();
+    //                 } catch (error) {
+    //                     console.error(error);
+    //                 }
+    //                 // fetch('/product/delete', {
+    //                 //     method: 'DELETE',
+    //                 //     headers: {
+    //                 //         'Content-Type': 'application/json',
+    //                 //         credentials: 'include'
+    //                 //     },
+    //                 //     body: JSON.stringify({title: titleText})
+    //                 // })
+    //                 //     .then(response => response.json())
+    //                 //     .then(data => {
+    //                 //         console.log(data);
+    //                 //         card.remove();
+    //                 //     })
+    //                 //     .catch(error => console.error(error));
+    //
+    //                 // Додаткова логіка для видалення або обробки
+    //             }
+    //         }
+    //     }
+    // });
+
+
+    const logoutButton = document.querySelector('.logout');
+    if (logoutButton !== null) {
+        logoutButton.addEventListener('click', () => {
+            fetch('/user/logout', {
+                method: 'POST'
+            }).then(() => {
+                window.location.href = '/';
+            });
+        });
+    }
+
+</script>
+
+</body>
+</html>

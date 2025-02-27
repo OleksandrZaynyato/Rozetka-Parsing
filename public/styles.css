@@ -1,0 +1,9 @@
+.base-layout-centered{
+    width: 100%;
+    max-width: 1438px;
+    padding-left: 36px;
+    padding-right: 36px;
+    margin-left: auto;
+    margin-right: auto;
+    /*box-sizing: border-box;*/
+}

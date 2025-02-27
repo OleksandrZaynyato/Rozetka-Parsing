@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Register</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link href="../fonts.css" rel="stylesheet">
+
+
+</head>
+<style>
+    /* Центруємо форму на сторінці */
+    .register-form {
+        width: 300px;
+        margin: 100px auto;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+        text-align: center;
+    }
+
+    .register-form h2 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .register-form label {
+        display: block;
+        text-align: left;
+        margin-bottom: 8px;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .register-form input[type="text"],
+    .register-form input[type="email"],
+    .register-form input[type="tel"],
+    .register-form input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+        box-sizing: border-box; /* Для запобігання виходу за межі */
+    }
+
+    .register-form button {
+        width: 100%;
+        padding: 10px;
+        background-color: #6a11cb;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .register-form button:hover {
+        background-color: #14152a;
+    }
+
+</style>
+<body>
+
+<div class="register-form roboto-regular">
+    <h2>Register</h2>
+    <form id="registration-form">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Name" required />
+
+        <label for="phoneNumber">Phone number</label>
+        <input type="tel" id="phoneNumber" name="phone" pattern="\+?[0-9\s\-\(\)]*" placeholder="+380 (XX) XXX-XX-XX" maxlength="13" required>
+
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Password" required />
+
+        <label for="confirmPassword">Confirm password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required />
+
+        <button type="submit">Register</button>
+    </form>
+    <br>
+    <span>Already have an account?</span> <a href="/user/login">Login</a>
+</div>
+<!--<script src="./main.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const phoneInput = document.querySelector('input[name="phone"]');
+    phoneInput.value = '+380'; // Встановлюємо початкове значення
+
+    phoneInput.addEventListener('input', () => {
+        const cleaned = phoneInput.value.replace(/\D/g, ''); // Видаляємо все, крім цифр
+
+        let formattedNumber = '';
+        if (cleaned.startsWith('380')) {
+            formattedNumber = '+' + cleaned;
+        } else if (cleaned.startsWith('0')) {
+            formattedNumber = '+380' + cleaned.slice(1);
+        }
+
+        phoneInput.value = formattedNumber; // Оновлюємо поле вводу
+    });
+    document.querySelector("#registration-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const username = document.querySelector("#name").value;
+
+
+        const phoneNumber = phoneInput.value;
+        const password = document.querySelector("#password").value;
+        const confirmPassword = document.querySelector("#confirmPassword").value;
+        try {
+            const response = await fetch("/user/registration", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    credentials: "include",
+                },
+                body: JSON.stringify({ username, password, confirmPassword, phoneNumber }),
+            });
+            if (response.ok) {
+                const result = await response.json();
+                console.log(result.message); // Лог для перевірки
+                window.location.href = "/";
+                await Swal.fire({
+                    icon: "success",
+                    title: "Registration successful",
+                    text: result.message,
+                });
+            }
+
+            if (response.status === 400) {
+                const data = await response.json();
+                await Swal.fire({
+                    icon: "error",
+                    title: "Registration failed",
+                    text: data.message,
+                    confirmButtonText: "Ok"
+                });
+            }
+        } catch (error) {
+            console.error("Error registering:", error);
+        }
+    })
+</script>
+</body>
+</html>

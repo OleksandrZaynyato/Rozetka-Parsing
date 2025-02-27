@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Log in</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link href="../fonts.css" rel="stylesheet">
+</head>
+<style>
+    /* Center the form on the page */
+    .login-form {
+        width: 300px;
+        margin: 100px auto;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+        text-align: center;
+    }
+
+    .login-form h2 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .login-form label {
+        display: block;
+        text-align: left;
+        margin-bottom: 8px;
+        color: #333;
+        font-size: 14px;
+        width: 100%;
+    }
+
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    .login-form button {
+        width: 100%;
+        padding: 10px;
+        background-color: #6a11cb;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .login-form button:hover {
+        /*background-color: #0056b3;*/
+        background-color: #14152a;
+    }
+</style>
+<body>
+<!--<form action="/user/login" method="post">-->
+<!--    <input type="email" name="email" placeholder="Email">-->
+<!--    <input type="password" name="password" placeholder="Password">-->
+<!--    <input type="submit" value="Login">-->
+<!--</form>-->
+
+<div class="login-form roboto-regular">
+    <h2 class="roboto-medium">Login</h2>
+    <form id="login-form">
+        <label for="name">Name</label>
+        <input id="name" type="text" name="name" placeholder="Name" required />
+
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password" placeholder="Password" required />
+
+        <a href="../homePage/index.hbs"><button type="submit">Login</button></a>
+
+    </form>
+    <br>
+    <span> Don't have an account? </span><a href="/user/registration">Register</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('login-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        try {
+            const username = document.querySelector("#name").value;
+            const password = document.querySelector("#password").value;
+
+            const response = await fetch('/user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    credentials: 'include'
+                },
+                body: JSON.stringify({username, password})
+            });
+
+            const data = await response.json();
+            console.log(data);
+            if (response.ok) {
+                await Swal.fire({
+                    title: 'Success',
+                    text: data.message,
+                    icon: 'success',
+                    confirmButtonText: 'Cool'
+                });
+                window.location.href = 'http://localhost:3000/';
+            }
+            if (response.status === 400) {
+                await Swal.fire({
+                    title: 'Error',
+                    text: data.message,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    });
+</script>
+</body>
+</html>
